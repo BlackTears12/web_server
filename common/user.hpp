@@ -13,8 +13,7 @@ namespace web_server
       string passwHash;
    };
    
-   User::User(/* args */)
-   {
+   User::User(/* args */){
    }
    
    User::~User()
