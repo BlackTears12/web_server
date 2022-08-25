@@ -68,7 +68,7 @@ namespace web_server
    }
 
    void Web_Server::parse_login_buffer(beast::websocket::stream<tcp::socket> &ws,login_data &data){
-
+      
    }
 
    User* Web_Server::login(beast::websocket::stream<tcp::socket> &ws){
