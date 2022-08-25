@@ -1,5 +1,6 @@
 #pragma once
 #include "../common/user.hpp"
+#include "../common/web_connection.hpp"
 #include <vector>
 #include <thread>
 using std::vector;
@@ -33,7 +34,7 @@ namespace web_server
          usr = user_list[startindex+endindex/2];
          return;
       }
-      std::thread(find_user,(key,startindex,(startindex+endindex/2)-1,usr)).detach();
+      std::thread(find_user,this,(key,startindex,(startindex+endindex/2)-1,usr)).detach();
       find_user(key,(startindex+endindex/2)+1,endindex,usr);
    }
 

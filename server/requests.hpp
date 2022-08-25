@@ -1,6 +1,5 @@
 #pragma once
-#include <boost/beast/core.hpp>
-#include <boost/beast/websocket.hpp>
+#include "../common/web_connection.hpp"
 #include "../common/user.hpp"
 #include <iostream>
 #include <string>
@@ -42,9 +41,4 @@ namespace web_server
       vector<string> args;
       User* sender;
    };
-
-   string hash(string key){
-      //Key needs to be hashed with SHA256
-      return key;
-   }
 }

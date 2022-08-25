@@ -15,11 +15,13 @@ namespace web_server
    public:
       static Web_Server* Instance();
       static void Delete();
+      void process_socket_connection(tcp::socket q);
    private:
       static Web_Server* instance;
       User_Container* user_containter;
-
-      void process_socket_connection(tcp::socket q);
+   
+      Web_Server();
+      ~Web_Server();
       void process_request(User* sender,beast::flat_buffer &request);
       void send_message(User* sender,vector<string> args);
       void parse_login_buffer(beast::websocket::stream<tcp::socket> &ws,login_data &data);

@@ -1,5 +1,3 @@
-#include <boost/beast/core.hpp>
-#include <boost/beast/websocket.hpp>
 #include "web_server.hpp"
 #include <iostream>
 #include <string>
@@ -22,7 +20,7 @@ int main(){
 
    io_context ioc(1);   //is same as io_context ioc{1}
    tcp::acceptor acceptor(ioc,{address,port});
-   web_server * server = new web_server
+   Web_Server* server = Web_Server::Instance();
 
    while(true){
       tcp::socket socket(ioc);
@@ -30,7 +28,7 @@ int main(){
       std::cout << "socket accepted" << std::endl;
 
       //spawning a thread to work with accepted socket
-      std::thread(process_socket_connection,std::move(socket)).detach();
+      std::thread(Web_Server::process_socket_connection,server,std::move(socket)).detach();
    }
    return 0;
 }
