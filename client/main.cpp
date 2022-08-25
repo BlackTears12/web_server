@@ -1,26 +1,15 @@
-#include <boost/beast/core.hpp>
-#include <boost/beast/websocket.hpp>
-#include <boost/asio/connect.hpp>
-#include <boost/asio/ip/tcp.hpp>
-#include <cstdlib>
+#include "client_connection_resolver.hpp"
 #include <iostream>
-#include <string>
+using namespace web_client;
+#define host "127.0.0.1"
+#define port "8083"
 
-namespace beast = boost::beast;         // from <boost/beast.hpp>
-namespace http = beast::http;           // from <boost/beast/http.hpp>
-namespace websocket = beast::websocket; // from <boost/beast/websocket.hpp>
-namespace net = boost::asio;            // from <boost/asio.hpp>
-using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
-using std::string;
-
-int main(int argc, char **argv)
+int old_client_connect(int argc, char **argv)
 {
    try
    {
-      auto const host = "127.0.0.1";
-      auto const port = "8083";
-      auto const text = "asd";
 
+      string text = "request";
       // The io_context is required for all I/O
       net::io_context ioc;
 
@@ -69,4 +58,16 @@ int main(int argc, char **argv)
       return EXIT_FAILURE;
    }
    return EXIT_SUCCESS;
+}
+
+int main(int argc,char** argv){
+   try{
+      Client_Connection_Resolver ccr;
+      ccr.connect(host,port);
+      std::cout << ccr.send_request("asd");
+      ccr.disconnect();
+   }catch(std::exception const &e){
+      std::cerr << "Error" << e.what() << std::endl;
+      return EXIT_FAILURE;
+   }
 }
