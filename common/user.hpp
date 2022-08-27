@@ -5,8 +5,8 @@ namespace common
 {
    class User{
    public:
-      User(/* args */);
-      ~User();
+      User(/* args */){}
+      ~User(){}
 
       string get_UID(){return UID;}
       string get_passwHash(){return passwHash;}
@@ -16,11 +16,4 @@ namespace common
       string passwHash;
       string privkey;
    };
-   
-   User::User(/* args */){
-   }
-   
-   User::~User()
-   {
-   }
 }

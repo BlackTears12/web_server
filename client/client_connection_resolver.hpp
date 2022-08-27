@@ -1,15 +1,7 @@
 #include "../common/commonheader.hpp"
-#include <boost/beast/core.hpp>
-#include <boost/beast/websocket.hpp>
-#include <boost/asio/connect.hpp>
-#include <boost/asio/ip/tcp.hpp>
+#include "../common/web_connection.hpp"
+#include <iostream>
 #include <cstdlib>
-
-namespace beast = boost::beast;
-namespace http = beast::http;
-namespace websocket = beast::websocket;
-namespace net = boost::asio;
-using tcp = boost::asio::ip::tcp;
 
 namespace web_client
 {

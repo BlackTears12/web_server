@@ -10,4 +10,12 @@
     #include <boost/beast/websocket.hpp>
     #include <boost/asio/connect.hpp>
     #include <boost/asio/ip/tcp.hpp>
+    #include <cstdlib>
 #endif
+namespace beast = boost::beast;
+namespace http = beast::http;
+namespace net = boost::asio;
+namespace websocket = beast::websocket;
+using net::ip::address;
+using net::io_context;
+using tcp = net::ip::tcp;

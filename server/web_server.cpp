@@ -1,19 +1,21 @@
 #include "web_server.hpp"
 namespace web_server
 {
+   Web_Server* Web_Server::instance = nullptr;
+
    Web_Server* Web_Server::Instance(){
       if(!instance)
          instance = new Web_Server();
       return instance;
    }
 
-   void Web_Server::Delete(){
+   void Web_Server::Destroy(){
       if(instance)
          delete instance;
    }
 
    void Web_Server::process_socket_connection(tcp::socket q){
-      boost::beast::websocket::stream<tcp::socket> ws(std::move(q));
+      websocket::stream<tcp::socket> ws(std::move(q));
       ws.accept();
       User* user;
       try{
@@ -21,20 +23,20 @@ namespace web_server
       }
       catch(std::exception &e){
          std::cerr << "failed login "<<e.what();
-         ws.write("failed login "+string(e.what()));
+         ws.write(net::buffer("failed login "+string(e.what())));
          return;
       }
-      ws.write("login ok");
+      ws.write(net::buffer("login ok"));
       while(true)
       {
          try{//living connection
-            boost::beast::flat_buffer buffer;
+            beast::flat_buffer buffer;
             ws.read(buffer);
             process_request(user,buffer);
             ws.write(buffer.data());
          }
-         catch(boost::beast::system_error const& e){
-            if(e.code() != boost::beast::websocket::error::closed){
+         catch(beast::system_error const& e){
+            if(e.code() != websocket::error::closed){
                std::cout << e.code().message() << std::endl;
                break;
             }
@@ -67,16 +69,22 @@ namespace web_server
 
    }
 
-   void Web_Server::parse_login_buffer(beast::websocket::stream<tcp::socket> &ws,login_data &data){
-      
+   void Web_Server::parse_login_buffer(beast::flat_buffer &buffer,login_data &data){
+      string buff_data = beast::buffers_to_string(buffer.data());
+      int i = 0;
+      while(buff_data[i] != '-' && i < buff_data.size()){
+         data.username += buff_data[i];
+         ++i;
+      }
+      data.passwHash = buff_data.substr(i);
    }
 
-   User* Web_Server::login(beast::websocket::stream<tcp::socket> &ws){
-      ws.write("<login_request>");
+   User* Web_Server::login(websocket::stream<tcp::socket> &ws){
+      ws.write(net::buffer("<login_request>"));
       beast::flat_buffer buff;
       ws.read(buff);
       login_data data;
-      parse_login_buffer(ws,data);
+      parse_login_buffer(buff,data);
       User* usr = user_containter->get_user(data.username);
       if(!usr)
          throw FailedLoginException("no user found");

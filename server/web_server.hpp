@@ -7,14 +7,14 @@ using namespace common;
 namespace web_server
 {
    struct login_data{
-      string username;
-      string passwHash;
+      string username = "";
+      string passwHash = "";
    };
 
    class Web_Server{
    public:
       static Web_Server* Instance();
-      static void Delete();
+      static void Destroy();
       void process_socket_connection(tcp::socket q);
    private:
       static Web_Server* instance;
@@ -24,8 +24,8 @@ namespace web_server
       ~Web_Server();
       void process_request(User* sender,beast::flat_buffer &request);
       void send_message(User* sender,vector<string> args);
-      void parse_login_buffer(beast::websocket::stream<tcp::socket> &ws,login_data &data);
-      User* login(beast::websocket::stream<tcp::socket> &ws);
+      void parse_login_buffer(beast::flat_buffer &buffer,login_data &data);
+      User* login(websocket::stream<tcp::socket> &ws);
 
    class FailedLoginException : public std::exception{
    public:

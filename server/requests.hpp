@@ -1,26 +1,20 @@
 #pragma once
+#include "../common/commonheader.hpp"
 #include "../common/web_connection.hpp"
 #include "../common/user.hpp"
 #include <iostream>
-#include <string>
 #include <thread>
 #include <sstream>
 
-namespace beast = boost::beast;
-using std::string;
-using std::vector;
-using boost::asio::ip::address;
-using boost::asio::io_context;
-using tcp = boost::asio::ip::tcp;
 using namespace common;
 
 namespace web_server
 {
    struct Request
    {
-      Request(User* usr,beast::flat_buffer &request) : args(){
+      Request(User* usr,beast::flat_buffer request) : args(){
          sender = usr;
-         std::stringstream ss(beast::buffers_to_string(request));
+         std::stringstream ss(beast::buffers_to_string(request.data()));
          string str;
          ss >> str;
          if(str == "message")
